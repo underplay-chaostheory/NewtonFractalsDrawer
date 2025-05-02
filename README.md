@@ -29,8 +29,8 @@ démonstration pour un polynôme de degré 7.
 - Les informations sur le polynôme, la partie du plan complexe observée et les paramètres de la méthode de
 Newton sont affichées à droites, avec la possibilité d'en modifier certaines, telle que le critère d'arrêt.
 
-Le mode HD (Haute Définition) permet d'avoir une image plus précise pour les actions autres que le 
+- Le mode HD (Haute Définition) permet d'avoir une image plus précise pour les actions autres que le 
 Drag'n'Drop, au prix d'un léger temps de chargement.
 
-Le mode CR (Convergence Rate) ajouter un dégradé aux couleurs en fonction de la vitesse de convergence de la
+- Le mode CR (Convergence Rate) ajouter un dégradé aux couleurs en fonction de la vitesse de convergence de la
 méthode de Newton pour chaque point
