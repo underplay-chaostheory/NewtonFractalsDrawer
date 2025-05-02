@@ -5,7 +5,7 @@ qui se traduit ici par la possibilité de modifier les racines en Drag'n'Drop, e
 la fractale en temp réel.
 Le fichier index.html permet d'accéder à l'application.
 
-!
+!(Demo.png)
 
 L'écran est une partie du plan complexe, sur lequel aparraissent les n racines qui définissent le polynôme.
 Chaque point du complexe est colorié selon la racine vers laquelle converge les itérations de la Méthode de
