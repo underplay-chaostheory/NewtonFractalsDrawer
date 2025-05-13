@@ -5,7 +5,7 @@ class Complexe{
     - Soustraction
     - Multiplication
     - Division
-    - Opposission
+    - Opposition
     - Copie
     - Réinistialisation à 0
     - Affichage
@@ -75,7 +75,7 @@ class Complexe{
 
 
 function deep_copy(liste){
-    //Copie profonde d'une liste d'objet, il faut donc que les éléments de la liste support la méthode copy
+    //Copie profonde d'une liste d'objet, il faut donc que les éléments de la liste supporte la méthode copy
     let l = [];
     for (let value of liste){
         l.push(value.copy());
@@ -87,6 +87,8 @@ function deep_copy(liste){
 
 class Polynome{
     /*
+    Polynôme instancié par la liste de ses racines
+    
     Manipulation de Polynôme:
     - Evaluation
     - Evaluation de la dérivée
@@ -136,13 +138,13 @@ class Polynome{
 
 
 
-
 function mult(liste, z){
     //on applique mult(z) à chaque élément de la liste de complexe
     for (let value of liste){
         value.mult(z);
     }
 }
+
 function add(u1,u2){
     //On additonne terme à terme deux listes de complexe
     let l1 = u1.length;
@@ -182,7 +184,7 @@ function distance(z1,z2){
 
 
 class Roots {
-    /*
+  /*
     Racines du polynôme utilisé par la méthode de Newton.
     A chaque opération, on met à jour la forme développé du polynôme, la couleur associée à chaque racine, et le nombre de racine.
     On actualise de plus la postion et la couleur des racines sur l'écran si nécessaire.
@@ -193,429 +195,482 @@ class Roots {
     - Réinitialiser à la valeur par défaut
     - Mettre à jour la postion d'une racine
     */
-    constructor(){
-        this._root = [];
-        this._color = [];
-        this._polynome = null;
-        this._nb_root = 0;
-    }
+  constructor() {
+    this._root = [];
+    this._color = [];
+    this._polynome = null;
+    this._nb_root = 0;
+  }
 
-    root(){
-        return this._root;
-    }
-    color(){
-        return this._color;
-    }
-    polynome(){
-        return this._polynome
-    }
-    nb_root(){
-        return this._nb_root;
-    }
+  root() {
+    return this._root;
+  }
+  color() {
+    return this._color;
+  }
+  polynome() {
+    return this._polynome;
+  }
+  nb_root() {
+    return this._nb_root;
+  }
 
-    update_color(){
-        //Calcul des nb_root couleurs, réparties uniformément sur un arc en ciel
-        let step = 40 / (this._nb_root + 1);
-        let smoothing = -250;
-        this._color = [];
-        for(var i = 1; i <= this._nb_root; i++){
-            this._color[i-1] = [Math.round(255 * Math.exp((step*i-5)**2 / smoothing)),
-                            Math.round(255 * Math.exp((step*i-20)**2 / smoothing)),
-                            Math.round(255 * Math.exp((step*i-35)**2 / smoothing))]
-        }
+  update_color() {
+    //Calcul des nb_root couleurs, réparties uniformément sur un arc en ciel
+    let step = 40 / (this._nb_root + 1);
+    let smoothing = -250;
+    this._color = [];
+    for (var i = 1; i <= this._nb_root; i++) {
+      this._color[i - 1] = [
+        Math.round(255 * Math.exp((step * i - 5) ** 2 / smoothing)),
+        Math.round(255 * Math.exp((step * i - 20) ** 2 / smoothing)),
+        Math.round(255 * Math.exp((step * i - 35) ** 2 / smoothing)),
+      ];
     }
+  }
 
-    append(center, width, height){
-        if(this._nb_root < 30){
-            this._nb_root += 1;
-            this.update_color();
+  append(center, width, height) {
+    if (this._nb_root < 30) {
+      this._nb_root += 1;
+      this.update_color();
 
-            let element = document.createElement("p");
-            element.appendChild(document.createTextNode(this._nb_root-1));
-            document.body.appendChild(element);
-            element.setAttribute("id","racine" + (this._nb_root-1));
-            element.setAttribute("class", "racine");
-            element.style.left = (width / 2 - 10) + "px";
-            element.style.top = (height / 2 - 10) + "px";
-            element.ondragstart = function(){
-                return false;
-            };
-            element.addEventListener("mousedown", drag);
+      let element = document.createElement("p");
+      element.appendChild(document.createTextNode(this._nb_root - 1));
+      document.body.appendChild(element);
+      element.setAttribute("id", "racine" + (this._nb_root - 1));
+      element.setAttribute("class", "racine");
+      element.style.left = width / 2 - 10 + "px";
+      element.style.top = height / 2 - 10 + "px";
+      element.ondragstart = function () {
+        return false;
+      };
+      element.addEventListener("mousedown", drag);
 
-            for(let i = 0; i < this._nb_root; i++){
-                document.getElementById("racine" + i).style.backgroundColor = "rgb(" + this._color[i][0] + "," + this._color[i][1] + "," + this._color[i][2] + ")";
-            }
+      for (let i = 0; i < this._nb_root; i++) {
+        document.getElementById("racine" + i).style.backgroundColor =
+          "rgb(" +
+          this._color[i][0] +
+          "," +
+          this._color[i][1] +
+          "," +
+          this._color[i][2] +
+          ")";
+      }
 
-            this._root.push(new Complexe(center[0],center[1]));
-            this._polynome = developpement_polynomial(this._root);
-            console.log("Polynome : ", this._polynome.affiche());
-        }     
+      this._root.push(new Complexe(center[0], center[1]));
+      this._polynome = developpement_polynomial(this._root);
+      console.log("Polynome : ", this._polynome.affiche());
     }
+  }
 
-    pop(){
-        if(this._nb_root > 0){
-            this._nb_root -= 1;
-            document.getElementById("racine" + this._nb_root).remove();
-            this._root.pop();
-            this._color.pop();
-            this._polynome = developpement_polynomial(this._root);
-            console.log("Polynome : ", this._polynome.affiche());
-        }
+  pop() {
+    if (this._nb_root > 0) {
+      this._nb_root -= 1;
+      document.getElementById("racine" + this._nb_root).remove();
+      this._root.pop();
+      this._color.pop();
+      this._polynome = developpement_polynomial(this._root);
+      console.log("Polynome : ", this._polynome.affiche());
     }
+  }
 
-    reset(){
-        for(let id = 0; id < this._nb_root; id++){
-            document.getElementById("racine" + id).remove();
-        }
-        this._nb_root = 0;
-        this._root = [];
-        this._color = [];
-        this._polynome = [];
-        console.log("reset");
+  reset() {
+    for (let id = 0; id < this._nb_root; id++) {
+      document.getElementById("racine" + id).remove();
     }
+    this._nb_root = 0;
+    this._root = [];
+    this._color = [];
+    this._polynome = [];
+    console.log("reset");
+  }
 
-    update_root(i,x,y){
-        if (0 <= i && i < this._nb_root){
-            this._root[i].re = x;
-            this._root[i].im = y;
-            this._polynome = developpement_polynomial(this._root);
-            console.log("Polynome : ", this._polynome.affiche());
-        }
+  update_root(i, x, y) {
+    if (0 <= i && i < this._nb_root) {
+      this._root[i].re = x;
+      this._root[i].im = y;
+      this._polynome = developpement_polynomial(this._root);
+      console.log("Polynome : ", this._polynome.affiche());
     }
+  }
 }
 
 
 
-class Coordinates{
-    /*
+class Coordinates {
+  /*
     Partie du plan complexe considéré par l'utilisateur.
 
     La description des méthodes est donnée dans leur définition.
     */
-    constructor(center,x_width,y_width){
-        this._center = center;
-        this._xwidth = x_width;
-        this._ywidth = y_width;
-    }
+  constructor(center, x_width, y_width) {
+    this._center = center;
+    this._xwidth = x_width;
+    this._ywidth = y_width;
+  }
 
-    plane_to_viewport(x,y,width,height){
-        //Associe un point du plan complexe à un pixel de l'écran
-        let vector = [x - this._center[0], y - this._center[1]];
-        let scale = [width / this._xwidth, height / this._ywidth];
-        return [ width / 2 + scale[0] * vector[0], height / 2 - scale[1] * vector[1]];
-    }
+  plane_to_viewport(x, y, width, height) {
+    //Associe un point du plan complexe à un pixel de l'écran
+    let vector = [x - this._center[0], y - this._center[1]];
+    let scale = [width / this._xwidth, height / this._ywidth];
+    return [
+      width / 2 + scale[0] * vector[0],
+      height / 2 - scale[1] * vector[1],
+    ];
+  }
 
-    viewport_to_plane(x,y,width,height){
-        //Associe un pixel de l'écran à un point du plan comlpexe
-        let vector = [x - width / 2, y - height / 2];
-        let scale = [this._xwidth / width, this._ywidth / height];
-        return [this._center[0] + scale[0] * vector[0], this._center[1] - scale[1] * vector[1]];
-    }
+  viewport_to_plane(x, y, width, height) {
+    //Associe un pixel de l'écran à un point du plan comlpexe
+    let vector = [x - width / 2, y - height / 2];
+    let scale = [this._xwidth / width, this._ywidth / height];
+    return [
+      this._center[0] + scale[0] * vector[0],
+      this._center[1] - scale[1] * vector[1],
+    ];
+  }
 
-    update_view_root(width, height){
-        // Actualise la position de toutes les racines sur l'écran, les cachent si elle en sortent
-        const n = roots.nb_root();
-        for(let i = 0; i < n; i++){
-            let position = this.plane_to_viewport(roots.root()[i].re,roots.root()[i].im,width,height);
-            let racine = document.getElementById("racine" + i);
-            if(0 < position[0] && position[0] < width - 30  &&  0 < position[1] && position[1] < height - 30){
-                racine.style.visibility = "visible";
-                racine.style.left = position[0] + "px";
-                racine.style.top = position[1] + "px";
-            }else{
-                racine.style.visibility = "hidden";
-            }  
-        }
+  update_view_root(width, height) {
+    // Actualise la position de toutes les racines sur l'écran, les cachent si elle en sortent
+    const n = roots.nb_root();
+    for (let i = 0; i < n; i++) {
+      let position = this.plane_to_viewport(
+        roots.root()[i].re,
+        roots.root()[i].im,
+        width,
+        height,
+      );
+      let racine = document.getElementById("racine" + i);
+      if (
+        0 < position[0] &&
+        position[0] < width - 30 &&
+        0 < position[1] &&
+        position[1] < height - 30
+      ) {
+        racine.style.visibility = "visible";
+        racine.style.left = position[0] + "px";
+        racine.style.top = position[1] + "px";
+      } else {
+        racine.style.visibility = "hidden";
+      }
     }
+  }
 
-    get center(){
-        return this._center;
-    }
-    set center(point){
-        this._center = point;
-    }
-    get xwidth(){
-        return this._xwidth;
-    }
-    set xwidth(x){
-        this._xwidth = x;
-    }
-    get ywidth(){
-        return this._ywidth;
-    }
-    set ywidth(y){
-        this._ywidth = y;
-    }
+  get center() {
+    return this._center;
+  }
+  set center(point) {
+    this._center = point;
+  }
+  get xwidth() {
+    return this._xwidth;
+  }
+  set xwidth(x) {
+    this._xwidth = x;
+  }
+  get ywidth() {
+    return this._ywidth;
+  }
+  set ywidth(y) {
+    this._ywidth = y;
+  }
 
-    shift_center(xshift, yshift){
-        //Déplace le centre de la partie du plan complexe par le vecteur fournis
-        this._center[0] += xshift;
-        this._center[1] += yshift;
-    }
+  shift_center(xshift, yshift) {
+    //Déplace le centre de la partie du plan complexe par le vecteur fournis
+    this._center[0] += xshift;
+    this._center[1] += yshift;
+  }
 
-    move_center(x_dir,y_dir,width,height){
-        //Déplace le centre du plan complexe vers la direction donnée,
-        //d'une distance proportionnel à la norme du vecteur de déplacement
-        let pointeur = this.viewport_to_plane(x_dir,y_dir,width,height);
-        let direction = [pointeur[0] - this._center[0], pointeur[1] - this._center[1]];
+  move_center(x_dir, y_dir, width, height) {
+    //Déplace le centre du plan complexe vers la direction donnée,
+    //d'une distance proportionnel à la norme du vecteur de déplacement
+    let pointeur = this.viewport_to_plane(x_dir, y_dir, width, height);
+    let direction = [
+      pointeur[0] - this._center[0],
+      pointeur[1] - this._center[1],
+    ];
 
-        this._center[0] += direction[0] * 0.1;
-        this._center[1] += direction[1] * 0.1;
-    }
+    this._center[0] += direction[0] * 0.1;
+    this._center[1] += direction[1] * 0.1;
+  }
 
-    rescale_xwidth(scaling){
-        this._xwidth += scaling;
-    }
-    rescale_ywidth(scaling){
-        this._ywidth += scaling;
-    }
+  rescale_xwidth(scaling) {
+    this._xwidth += scaling;
+  }
+  rescale_ywidth(scaling) {
+    this._ywidth += scaling;
+  }
 
-    reset(){
-        this._center = [0,0];
-        this._xwidth = 20;
-        this._ywidth = 20;
-    }
-
+  reset() {
+    this._center = [0, 0];
+    this._xwidth = 20;
+    this._ywidth = 20;
+  }
 }
 
 
 
-class UI{
-    /*
+class UI {
+  /*
     Gestion de :
     - la zone d'information et des événements.
     - la possibilité de changer la valeur de epsilon et itermax par une saisie.
     - mode haute résolution 
     */
-    proximity(z, unused, roots){
-        //test si le complexe z se trouve à un distance inférieur à epsilon d'une racine
-        let close = null;
-        let n = roots.length;
-        for(let i = 0; i < n && !close; i++){
-            if (distance(z, roots[i]) < this._epsilon){
-                close = i;
-            }
-        }
-        return close;
+  proximity(z, unused, roots) {
+    //test si le complexe z se trouve à un distance inférieur à epsilon d'une racine
+    let close = null;
+    let n = roots.length;
+    for (let i = 0; i < n && !close; i++) {
+      if (distance(z, roots[i]) < this._epsilon) {
+        close = i;
+      }
     }
+    return close;
+  }
 
-    step(z1, z2, roots){
-        //text si la distance entre x_k+1 et x_k est inférieur à epsilon, si oui renvois la racine la plus proche de x_k+1
-        let k = 1;
-        if(distance(z1,z2) < this._epsilon){
-            return this.proximity(z1, k, roots);
-        }else{
-            null;
-        }
+  step(z1, z2, roots) {
+    //text si la distance entre x_k+1 et x_k est inférieur à epsilon, si oui renvois la racine la plus proche de x_k+1
+    let k = 1;
+    if (distance(z1, z2) < this._epsilon) {
+      return this.proximity(z1, k, roots);
+    } else {
+      null;
     }
+  }
 
+  constructor() {
+    this._iterationMax = 50;
+    this._epsilon = Math.min(
+      (25 * plan_complexe.xwidth) / width,
+      (25 * plan_complexe.ywidth) / height,
+    );
+    this._stopRule = this.proximity;
+    this._modeHD = false;
+    this._modeCR = false;
+  }
 
-    constructor(){
-        this._iterationMax = 50;
-        this._epsilon = Math.min(25 * plan_complexe.xwidth / width, 25 * plan_complexe.ywidth / height);
-        this._stopRule = this.proximity;
-        this._modeHD = false;
-        this._modeCR = false;
+  get iterationMax() {
+    return this._iterationMax;
+  }
+  set iterationMax(n) {
+    this._iterationMax = n;
+  }
+  get epsilon() {
+    return this._epsilon;
+  }
+  set epsilon(e) {
+    this._epsilon = e;
+  }
+  get stoprule() {
+    return this._stopRule;
+  }
+  set stoprule(f) {
+    this._stopRule = f;
+  }
+  get modeHD() {
+    return this._modeHD;
+  }
+  set modeHD(bool) {
+    this._modeHD = bool;
+  }
+  get modeCR() {
+    return this._modeCR;
+  }
+  set modeCR(bool) {
+    this._modeCR = bool;
+  }
+
+  updateSettings() {
+    //On actualise les champs 'Iteration max' et 'Epsilon'
+    document.getElementById("choseItermax").value = this._iterationMax;
+    document.getElementById("choseEpsilon").value = this._epsilon.toFixed(5);
+  }
+
+  setElementSize() {
+    //Calcul la taille des deux zones d'affichage pour éviter les chevauchements
+    let canvas = document.getElementById("zoneAffichage");
+    canvas.width = width;
+    canvas.height = height;
+
+    let image = document.getElementById("image");
+    image.style.width = width + "px";
+
+    let wrapper = document.getElementById("information");
+    wrapper.style.width = window.innerWidth - width + "px";
+    wrapper.style.left = width + "px";
+  }
+
+  updateInfoPolynomial() {
+    //On actualise les champs 'Polynome' et 'Racines'
+    document.getElementById("displayPolynomial").innerHTML = roots
+      .polynome()
+      .affiche();
+    let root_liste = "";
+    let n = roots.root().length;
+    for (let i = 0; i < n - 1; i++) {
+      root_liste += roots.root()[i].affiche() + ", ";
     }
+    document.getElementById("displayRoots").innerHTML =
+      root_liste + roots.root()[n - 1].affiche();
+  }
 
-    get iterationMax(){
-        return this._iterationMax;
-    }
-    set iterationMax(n){
-        this._iterationMax = n;
-    }
-    get epsilon(){
-        return this._epsilon;
-    }
-    set epsilon(e){
-        this._epsilon = e;
-    }
-    get stoprule(){
-        return this._stopRule;
-    }
-    set stoprule(f){
-        this._stopRule = f;
-    }
-    get modeHD(){
-        return this._modeHD;
-    }
-    set modeHD(bool){
-        this._modeHD = bool;
-    }
-    get modeCR(){
-        return this._modeCR;
-    }
-    set modeCR(bool){
-        this._modeCR = bool;
-    }
+  updateInfoPlan() {
+    //On actualise les informations relatives à la partie du plan complexe étudiée
+    let left = (plan_complexe.center[0] - plan_complexe.xwidth / 2).toFixed(2);
+    let rigth = (plan_complexe.center[0] + plan_complexe.xwidth / 2).toFixed(2);
+    let top = (plan_complexe.center[1] - plan_complexe.ywidth / 2).toFixed(2);
+    let bot = (plan_complexe.center[1] + plan_complexe.ywidth / 2).toFixed(2);
+    document.getElementById("displayTopleft").innerHTML =
+      "(" + left + ";" + top + ")";
+    document.getElementById("displayTopright").innerHTML =
+      "(" + rigth + ";" + top + ")";
+    document.getElementById("displayCenter").innerHTML =
+      "(" +
+      plan_complexe.center[0].toFixed(2) +
+      ";" +
+      plan_complexe.center[1].toFixed(2) +
+      ")";
+    document.getElementById("displayBottomleft").innerHTML =
+      "(" + left + ";" + bot + ")";
+    document.getElementById("displayBottomright").innerHTML =
+      "(" + rigth + ";" + bot + ")";
 
+    document.getElementById("choseWidth").value =
+      plan_complexe.xwidth.toFixed(5);
+    document.getElementById("choseHeight").value =
+      plan_complexe.ywidth.toFixed(5);
+  }
 
-    updateSettings(){
-        //On actualise les champs 'Iteration max' et 'Epsilon'
-        document.getElementById("choseItermax").value = this._iterationMax;
-        document.getElementById("choseEpsilon").value = (this._epsilon).toFixed(5);
-    }
+  setEventListener() {
+    //On crée les événements et leurs actions
+    let element = document.getElementById("zoneAffichage");
+    window.addEventListener("keyup", action_manager);
+    element.addEventListener("wheel", zoom, { passive: false });
+    element.addEventListener("mousedown", drag);
 
-    setElementSize(){
-        //Calcul la taille des deux zones d'affichage pour éviter les chevauchements
-        let canvas = document.getElementById("zoneAffichage");
-        canvas.width = width;
-        canvas.height = height;
-
-        let image = document.getElementById("image");
-        image.style.width = width + "px";
-
-        let wrapper = document.getElementById("information");
-        wrapper.style.width = window.innerWidth - width + "px";
-        wrapper.style.left = width + "px";
-    }
-
-    updateInfoPolynomial(){
-        //On actualise les champs 'Polynome' et 'Racines'
-        document.getElementById("displayPolynomial").innerHTML = roots.polynome().affiche();
-        let root_liste = "";
-        let n = roots.root().length;
-        for (let i = 0; i < n - 1; i++){
-            root_liste += roots.root()[i].affiche() + ", "
-        }
-        document.getElementById("displayRoots").innerHTML = root_liste + roots.root()[n - 1].affiche();
-    }
-
-    updateInfoPlan(){
-        //On actualise les informations relatives à la partie du plan complexe étudiée
-        let left = (plan_complexe.center[0] - plan_complexe.xwidth / 2).toFixed(2);
-        let rigth = (plan_complexe.center[0] + plan_complexe.xwidth / 2).toFixed(2);
-        let top = (plan_complexe.center[1] - plan_complexe.ywidth / 2).toFixed(2);
-        let bot = (plan_complexe.center[1] + plan_complexe.ywidth / 2).toFixed(2);
-        document.getElementById("displayTopleft").innerHTML = "(" + left + ";" + top + ")";
-        document.getElementById("displayTopright").innerHTML = "(" + rigth + ";" + top + ")";
-        document.getElementById("displayCenter").innerHTML = "(" + plan_complexe.center[0].toFixed(2) + ";" + plan_complexe.center[1].toFixed(2) + ")";
-        document.getElementById("displayBottomleft").innerHTML = "(" + left + ";" + bot + ")";
-        document.getElementById("displayBottomright").innerHTML = "(" + rigth + ";" + bot + ")";
-
-        document.getElementById("choseWidth").value = plan_complexe.xwidth.toFixed(5);
-        document.getElementById("choseHeight").value = plan_complexe.ywidth.toFixed(5);
-    }
-    
-
-    setEventListener(){
-        //On crée les événements et leurs actions
-        let element = document.getElementById("zoneAffichage");
-        window.addEventListener("keyup", action_manager);
-        element.addEventListener("wheel", zoom, {passive: false});
-        element.addEventListener("mousedown", drag);
-
-        element = document.getElementById("choseWidth");
-        element.addEventListener("focusout", (event) => {
-            let x = parseFloat(document.getElementById("choseWidth").value);
-            if(!isNaN(x) && x > 0){
-                plan_complexe.xwidth = x;
-                this.updateInfoPlan();
-                this._epsilon = Math.min(25 * plan_complexe.xwidth / width, 25 * plan_complexe.ywidth / height);
-                this.updateSettings();
-                update_view(0, 0, width, height, width, height, false);
-            }
-            console.log("Width : ", plan_complexe.xwidth);
-        });
-
-        element = document.getElementById("choseHeight");
-        element.addEventListener("focusout", (event) => {
-            let y = parseFloat(document.getElementById("choseHeight").value);
-            if(!isNaN(y) && y > 0){
-                plan_complexe.ywidth = y;
-                this.updateInfoPlan();
-                this._epsilon = Math.min(25 * plan_complexe.xwidth / width, 25 * plan_complexe.ywidth / height);
-                this.updateSettings();
-                update_view(0, 0, width, height, width, height, false);
-            }
-            console.log("Width : ", plan_complexe.ywidth);
-        });
-
-        element = document.getElementById("choseItermax");
-        element.addEventListener("focusout", (event) => {
-            let n = parseInt(document.getElementById("choseItermax").value);
-            if(!isNaN(n) && n > 0){
-                this._iterationMax = n;
-            }
-            console.log("Itermax : ", this._iterationMax);
-        });
-
-        element = document.getElementById("choseEpsilon");
-        element.addEventListener("focusout", (event) => {
-            let e = parseFloat(document.getElementById("choseEpsilon").value);
-            if(!isNaN(e) && e > 0){
-                this._epsilon = e;
-            }
-            console.log("Epsilon : ", this._epsilon);
-        });
-
-        element = document.getElementById("step");
-        element.addEventListener("click", (event) => {
-            this._epsilon = 0.01;
-            this._stopRule = this.step;
-            console.log("Mode : step");
-            this.updateSettings();
-        });
-
-        element = document.getElementById("proximity");
-        element.addEventListener("click", (event) => {
-            this._epsilon = Math.min(25 * plan_complexe.xwidth / width, 25 * plan_complexe.ywidth / height);
-            this._stopRule = this.proximity;
-            console.log("Mode : proximity");
-            this.updateSettings();
-        });
-
-        element = document.getElementById("resetEpsilon");
-        element.addEventListener("click", (event) => {
-            this._epsilon = Math.min(25 * plan_complexe.xwidth / width, 25 * plan_complexe.ywidth / height);
-            console.log("Epsilon : ", this._epsilon);
-            this.updateSettings();
-        });
-
-        element = document.getElementById("HDMode");
-        element.addEventListener("click", (event) => {
-            this._modeHD = document.getElementById("HDMode").checked;
-            console.log("Mode hd : ", this._modeHD);
-        });
-
-        element = document.getElementById("CRMode");
-        element.addEventListener("click", (event) => {
-            this._modeCR = document.getElementById("CRMode").checked;
-            console.log("Mode cr : ", this._modeCR);
-        });
-    }
-
-    
-    reset(){
-        this._iterationMax = 50;
-        this._stopRule = this.proximity;
-        this._modeCR = false;
-
-        this.updateInfoPolynomial();
+    element = document.getElementById("choseWidth");
+    element.addEventListener("focusout", (event) => {
+      let x = parseFloat(document.getElementById("choseWidth").value);
+      if (!isNaN(x) && x > 0) {
+        plan_complexe.xwidth = x;
         this.updateInfoPlan();
-        this._epsilon = Math.min(25 * plan_complexe.xwidth / width, 25 * plan_complexe.ywidth / height);
+        this._epsilon = Math.min(
+          (25 * plan_complexe.xwidth) / width,
+          (25 * plan_complexe.ywidth) / height,
+        );
         this.updateSettings();
-    }
-
-
-    start(){
-        this._stopRule = this.proximity;
-        this._modeCR = false;   
-
-        this.setElementSize();
-        this.setEventListener();
-        
-
-        roots.append([5,0], width, height);
-        roots.append([-3,2], width, height);
-        roots.append([-3,-2], width, height);
-        plan_complexe.update_view_root(width, height);
         update_view(0, 0, width, height, width, height, false);
+      }
+      console.log("Width : ", plan_complexe.xwidth);
+    });
 
-        this.updateInfoPolynomial();
+    element = document.getElementById("choseHeight");
+    element.addEventListener("focusout", (event) => {
+      let y = parseFloat(document.getElementById("choseHeight").value);
+      if (!isNaN(y) && y > 0) {
+        plan_complexe.ywidth = y;
         this.updateInfoPlan();
+        this._epsilon = Math.min(
+          (25 * plan_complexe.xwidth) / width,
+          (25 * plan_complexe.ywidth) / height,
+        );
         this.updateSettings();
-    }
+        update_view(0, 0, width, height, width, height, false);
+      }
+      console.log("Width : ", plan_complexe.ywidth);
+    });
+
+    element = document.getElementById("choseItermax");
+    element.addEventListener("focusout", (event) => {
+      let n = parseInt(document.getElementById("choseItermax").value);
+      if (!isNaN(n) && n > 0) {
+        this._iterationMax = n;
+      }
+      console.log("Itermax : ", this._iterationMax);
+    });
+
+    element = document.getElementById("choseEpsilon");
+    element.addEventListener("focusout", (event) => {
+      let e = parseFloat(document.getElementById("choseEpsilon").value);
+      if (!isNaN(e) && e > 0) {
+        this._epsilon = e;
+      }
+      console.log("Epsilon : ", this._epsilon);
+    });
+
+    element = document.getElementById("step");
+    element.addEventListener("click", (event) => {
+      this._epsilon = 0.01;
+      this._stopRule = this.step;
+      console.log("Mode : step");
+      this.updateSettings();
+    });
+
+    element = document.getElementById("proximity");
+    element.addEventListener("click", (event) => {
+      this._epsilon = Math.min(
+        (25 * plan_complexe.xwidth) / width,
+        (25 * plan_complexe.ywidth) / height,
+      );
+      this._stopRule = this.proximity;
+      console.log("Mode : proximity");
+      this.updateSettings();
+    });
+
+    element = document.getElementById("resetEpsilon");
+    element.addEventListener("click", (event) => {
+      this._epsilon = Math.min(
+        (25 * plan_complexe.xwidth) / width,
+        (25 * plan_complexe.ywidth) / height,
+      );
+      console.log("Epsilon : ", this._epsilon);
+      this.updateSettings();
+    });
+
+    element = document.getElementById("HDMode");
+    element.addEventListener("click", (event) => {
+      this._modeHD = document.getElementById("HDMode").checked;
+      console.log("Mode hd : ", this._modeHD);
+    });
+
+    element = document.getElementById("CRMode");
+    element.addEventListener("click", (event) => {
+      this._modeCR = document.getElementById("CRMode").checked;
+      console.log("Mode cr : ", this._modeCR);
+    });
+  }
+
+  reset() {
+    this._iterationMax = 50;
+    this._stopRule = this.proximity;
+    this._modeCR = false;
+
+    this.updateInfoPolynomial();
+    this.updateInfoPlan();
+    this._epsilon = Math.min(
+      (25 * plan_complexe.xwidth) / width,
+      (25 * plan_complexe.ywidth) / height,
+    );
+    this.updateSettings();
+  }
+
+  start() {
+    this._stopRule = this.proximity;
+    this._modeCR = false;
+
+    this.setElementSize();
+    this.setEventListener();
+
+    roots.append([5, 0], width, height);
+    roots.append([-3, 2], width, height);
+    roots.append([-3, -2], width, height);
+    plan_complexe.update_view_root(width, height);
+    update_view(0, 0, width, height, width, height, false);
+
+    this.updateInfoPolynomial();
+    this.updateInfoPlan();
+    this.updateSettings();
+  }
 }
 
 
@@ -631,8 +686,6 @@ var interface = new UI;
 function start(){
     interface.start();
 }
-
-
 
 
 function drag(event){
@@ -825,7 +878,6 @@ function zoom(scroll){
 
 
 function update_view(topleftx, toplefty, width, height, canvaswidth, canvasheight, optimized){
-
     //Mise à jour de l'écran en créant une toile vide et en la remplissant par la Fractale de Newton du polynôme courant
     let canvas = document.getElementById("zoneAffichage");
     let context = canvas.getContext("2d");
@@ -860,7 +912,9 @@ function update_view(topleftx, toplefty, width, height, canvaswidth, canvasheigh
                 let z1 = new Complexe(depart[0],depart[1]);
                 let z2;
                 let stop = false;
-                let root = null;let color = [0,0,0];let it = 0;
+                let root = null;
+              	let color = [0,0,0];
+              	let it = 0;
                 let point;let pixel;let abscisse;let ordonnee;
 
                 let k = 0;
@@ -901,7 +955,10 @@ function update_view(topleftx, toplefty, width, height, canvaswidth, canvasheigh
                     //On vérifie que le point se trouve dans la fenêtre étudié
                     abscisse = Math.round(point[0]);
                     ordonnee = Math.round(point[1]);
-                    if (topleftx <= abscisse && abscisse < botrightx && toplefty <= ordonnee && ordonnee < botrighty) {
+                    if (
+                      	topleftx <= abscisse && abscisse < botrightx && 
+                        toplefty <= ordonnee && ordonnee < botrighty
+                       ) {
                         pixel = 4 * ((ordonnee - toplefty) * width + abscisse - topleftx);
 
                         //Si le pixel à déjà été colorié, pas besoin de l'ajouter
