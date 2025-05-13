@@ -136,33 +136,34 @@ h1 {
     color: #FF5714;
 }
 
-#mode1, #mode2 {
-    bottom: 10px;
-    margin: 0px;
-    padding: 0px;
-    border: 0;
-    text-align: center;
-    display: inline-block;
-    position: absolute;
+#mode1,
+#mode2 {
+  bottom: 10px;
+  margin: 0px;
+  padding: 0px;
+  border: 0;
+  text-align: center;
+  display: inline-block;
+  position: absolute;
 }
 #mode1 {
-    left: 0px;
-    width: 50%;
+  left: 0px;
+  width: 50%;
 }
 #mode2 {
-    right: 0px;
-    width: 50%;
+  right: 0px;
+  width: 50%;
 }
 
-
-#HDMode, #CRMode {
-    right: 0px;
-    bottom: 0px;
-    margin: 5px 0px 5px 0px;
-    padding: 0;
-    border: 0;
-    text-align: left;
-    font-size: medium;
-    font-weight: 400;
-    display: inline-block;
+#HDMode,
+#CRMode {
+  right: 0px;
+  bottom: 0px;
+  margin: 5px 0px 5px 0px;
+  padding: 0;
+  border: 0;
+  text-align: left;
+  font-size: medium;
+  font-weight: 400;
+  display: inline-block;
 }
