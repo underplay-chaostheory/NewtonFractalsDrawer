@@ -1,79 +1,91 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="icon" type="image/x-icon" href=" fractale.ico">
-        <title>Fractale de Newton</title>
-        <link href="main.css" rel="stylesheet"/>
-        <script src="main.js"></script>
-    </head>
-    <body>
+  <head>
+    <link rel="icon" type="image/x-icon" href=" fractale.ico" />
+    <title>Fractale de Newton</title>
+    <link href="main.css" rel="stylesheet" />
+    <script src="main.js"></script>
+  </head>
+  <body>
     <div id="image" class="wrapper">
-        <canvas id="zoneAffichage"></canvas>
-        <canvas id="buffer" style="display: none;"></canvas>
+      <canvas id="zoneAffichage"></canvas>
+      <canvas id="buffer" style="display: none"></canvas>
     </div>
 
     <div id="information" class="wrapper">
-        <h1>Newton's Fractal</h1>
+      <h1>Newton's Fractal</h1>
 
-        <div id="polynome wrap">
-            <div class="displayPolynomial wrap">
-                <p class="txt" id="displayPolynomial"></p>
-            </div>
-            <div class="displayRoots wrap">
-                <p class="txt">Racines : </p><span id="displayRoots"></span>
-            </div>
+      <div id="polynome wrap">
+        <div class="displayPolynomial wrap">
+          <p class="txt" id="displayPolynomial"></p>
+        </div>
+        <div class="displayRoots wrap">
+          <p class="txt">Racines :</p>
+          <span id="displayRoots"></span>
+        </div>
+      </div>
+
+      <div id="plan">
+        <p class="point" id="displayTopleft">(-;-)</p>
+        <p class="point" id="displayTopright">(-;-)</p>
+        <p class="point" id="displayCenter">(-;-)</p>
+        <p class="point" id="displayBottomleft">(-;-)</p>
+        <p class="point" id="displayBottomright">(-;-)</p>
+      </div>
+
+      <div id="editor wrap">
+        <div class="choseWidth wrap">
+          <p class="txt">Width :</p>
+          <input type="number" id="choseWidth" />
+        </div>
+        <div class="choseHeight wrap">
+          <p class="txt">Height :</p>
+          <input type="number" id="choseHeight" />
+        </div>
+      </div>
+
+      <div id="settings wrap">
+        <div class="choseItermax wrap">
+          <p class="txt">It&#233;ration max :</p>
+          <input type="number" id="choseItermax" />
         </div>
 
-        <div id="plan">
-            <p class="point" id="displayTopleft">(-;-)</p>
-            <p class="point" id="displayTopright">(-;-)</p>
-            <p class="point" id="displayCenter">(-;-)</p>
-            <p class="point" id="displayBottomleft">(-;-)</p>
-            <p class="point" id="displayBottomright">(-;-)</p>
+        <div class="choseEpsilon wrap">
+          <p class="txt">&#949; :</p>
+          <input type="number" id="choseEpsilon" />
+          <button id="resetEpsilon">Default</button>
         </div>
 
-        <div id="editor wrap">
-            <div class="choseWidth wrap">
-                <p class="txt">Width : </p><input type="number" id="choseWidth"/>
-            </div>
-            <div class="choseHeight wrap">
-                <p class="txt">Height : </p><input type="number" id="choseHeight"/>
-            </div>
+        <div class="choseStoprule wrap">
+          <p class="txt">Condition d'arr&#234;t :</p>
+          <div>
+            <input type="radio" id="proximity" name="stopRule" checked />
+            <label for="proximity"
+              >min<sub>P(&#945;)=0</sub>| x<sub>k</sub> - &#945; | &#8804;
+              &#949;</label
+            >
+          </div>
+          <div>
+            <input type="radio" id="step" name="stopRule" />
+            <label for="step"
+              >| x<sub>k+1</sub> - x<sub>k</sub> | &#8804; &#949;</label
+            >
+          </div>
         </div>
-
-        <div id="settings wrap">
-            <div class="choseItermax wrap">
-                <p class="txt">It&#233;ration max : </p><input type="number" id="choseItermax"/>
-            </div>
-
-            <div class="choseEpsilon wrap">
-                <p class="txt">&#949; : </p><input type="number" id="choseEpsilon"/>
-                <button id="resetEpsilon">Default</button>
-            </div>
-
-            <div class="choseStoprule wrap">
-                <p class="txt">Condition d'arr&#234;t : </p>
-                <div>
-                    <input type="radio" id="proximity" name="stopRule" checked/>
-                    <label for="proximity">min<sub>P(&#945;)=0</sub>| x<sub>k</sub> - &#945; | &#8804; &#949;</label>
-                </div>
-                <div>
-                    <input type="radio" id="step" name="stopRule" />
-                    <label for="step">| x<sub>k+1</sub> - x<sub>k</sub> | &#8804; &#949;</label>
-                </div>
-            </div>
+      </div>
+      <div>
+        <div id="mode1">
+          <input type="checkbox" id="HDMode" name="modeHD" />
+          <label for="HDMode">Mode HD</label>
         </div>
-        <div>
-            <div id="mode1">
-                <input type="checkbox" id="HDMode" name="modeHD"/>
-            <label for="HDMode">Mode HD</label>
-            </div>
-            <div id="mode2">
-                <input type="checkbox" id="CRMode" name="modeCR"/>
-                <label for="CRMode">Mode CR</label>
-            </div>
+        <div id="mode2">
+          <input type="checkbox" id="CRMode" name="modeCR" />
+          <label for="CRMode">Mode CR</label>
         </div>
+      </div>
     </div>
-    <script>start()</script>
-    </body>
+    <script>
+      start();
+    </script>
+  </body>
 </html>
