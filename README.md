@@ -1,5 +1,5 @@
 # NewtonFractalsDrawer
-Ce programme a pour but de dessiner la fractale de Newton associé à un polynôme P de C[X] de façon dynamique.
+Ce programme dessine la fractale de Newton associé à un polynôme P de C[X] de façon dynamique.
 Le but est de pouvoir observer l'évolution de la Fractale de Newton dynamiquement en fonction du polynôme, ce qui se traduit ici par la possibilité de modifier les racines en Drag'n'Drop, et d'avoir l'actualisation de la fractale en temps réel.
 Le lien permettant d'accéder à l'application est fourni.
 
