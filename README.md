@@ -1,7 +1,7 @@
 # NewtonFractalsDrawer
-Ce programme dessine la fractale de Newton associé à un polynôme P de C[X] de façon dynamique.
-Le but est de pouvoir observer l'évolution de la Fractale de Newton dynamiquement en fonction du polynôme, ce qui se traduit ici par la possibilité de modifier les racines en Drag'n'Drop, et d'avoir l'actualisation de la fractale en temps réel.
-Le lien permettant d'accéder à l'application est fourni.
+Ce programme dessine la fractale de Newton associé à un polynôme P de C[X] de façon dynamique.<br>
+Le but est de pouvoir observer l'évolution de la Fractale de Newton dynamiquement en fonction du polynôme, ce qui se traduit ici par la possibilité de modifier les racines en Drag'n'Drop, et d'avoir l'actualisation de la fractale en temps réel.<br>
+Le lien permettant d'accéder à l'application est [ici](https://underplay-chaostheory.github.io/NewtonFractalsDrawer/)
 
 ![Image de démo](Demo.png)
 
@@ -13,9 +13,9 @@ Ce projet m’a permis d’appréhender JavaScript et de réfléchir sur des pro
 La seconde solution n’a pour l’instant pas donné de résultats concluants.
 
 # Utilisation
-L'écran est une partie du plan complexe, sur lequel apparaissent les n racines qui définissent le polynôme.
-Chaque point du complexe est colorié selon la racine vers laquelle converge les itérations de la Méthode de Newton débutant à ce point.
-Dans le cas de non convergence de la méthode, le point sera colorié en noir.
+L'écran est une partie du plan complexe, sur lequel apparaissent les n racines qui définissent le polynôme.<br>
+Chaque point du complexe est colorié selon la racine vers laquelle converge les itérations de la Méthode de Newton débutant à ce point.<br>
+Dans le cas de non convergence de la méthode, le point sera colorié en noir.<br>
 
 - L'exploration du plan se fait par Drag'n'Drop sur l'image elle-même.
 
@@ -39,6 +39,6 @@ méthode de Newton pour chaque point
 
 # A venir
 
-Tentative de parallélisation des calculs en utilisant une structure de données Union-Find.
-La méthode de Newton appliquée à un point z fourni une suite de point (z)<sub>k</sub>. Une idée fondamentale pour accélérer les calculs est que si au cours du calcul de (z)<sub>k</sub>, on tombe sur un point déjà calculé, il n’est pas nécessaire de continuer le calcul. En pratique, cela introduit des approximations : un pixel déjà étudié est une approximation d’un élément de (z<sub>0</sub>)<sub>k</sub> pour un certain z<sub>0</sub>.
+Tentative de parallélisation des calculs en utilisant une structure de données Union-Find.<br>
+La méthode de Newton appliquée à un point z fourni une suite de point (z)<sub>k</sub>. Une idée fondamentale pour accélérer les calculs est que si au cours du calcul de (z)<sub>k</sub>, on tombe sur un point déjà calculé, il n’est pas nécessaire de continuer le calcul. En pratique, cela introduit des approximations : un pixel déjà étudié est une approximation d’un élément de (z<sub>0</sub>)<sub>k</sub> pour un certain z<sub>0</sub>.<br>
 L’idée serait de diviser la zone de calcul sur N thread. Chaque thread applique la méthode de Newton sur les points de sa zone, et si lors d’un calcul, la suite (z)<sub>k</sub> sort de cette zone, le thread fait remonter l’information que tous ces points appartiennent au même bassin d’attraction (implémenter par une structure Union-Find).
